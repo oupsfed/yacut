@@ -19,8 +19,6 @@ def get_unique_short_id():
 
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
-    maps = URLMap.query.all()
-    print(*maps)
     form = URLMapForm()
     if form.validate_on_submit():
         short = form.custom_id.data
@@ -36,7 +34,10 @@ def index_view():
         db.session.add(urlmap)
         db.session.commit()
         flash('Ваша новая ссылка готова:')
-        flash(url_for('url_map_view', short=short, _external=True,), category='url')
+        flash(url_for('url_map_view',
+                      short=short,
+                      _external=True,),
+              category='url')
         return render_template('index.html', form=form)
 
     return render_template('index.html', form=form)
